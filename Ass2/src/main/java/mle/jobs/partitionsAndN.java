@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 import javax.annotation.OverridingMethodsMustInvokeSuper;
 
-import static mle.mleManager.totalN;
+import static mle.mleManager.totalN.N;
 import java.util.Random;
 import java.util.Set;
 
@@ -42,9 +42,12 @@ public class partitionsAndN {
                 Text threegram = new Text();
                 helperMap map = new helperMap();
                 String[] split_line = line.toString().split(",");
+                /*
                 for (String word : split_line[0].split(" ")){
                     if (stopWords.contains(word)) return; //checking for stop words in the trigram
-                }
+                } */
+                System.out.println(Arrays.toString(split_line));
+                System.out.println("@@@@@@@@@@@@@@@@@");
                 //TODO need to check if 3gram  is valid (from the banned words)
                 LongWritable single_count = new LongWritable(Long.parseLong(split_line[2]));
                 Random rand = new Random();
@@ -52,9 +55,9 @@ public class partitionsAndN {
                 if (n % 2 == 0) {
                     map.put(new LongWritable(0), single_count);
                 } else {
-                    map.put(new LongWritable(0), single_count);
+                    map.put(new LongWritable(1), single_count);
                 }
-                context.write(threegram , map);
+                context.write(new Text(split_line[0]) , map);
             }
             @Override
             public void cleanup(Context context)  throws IOException, InterruptedException {
@@ -96,7 +99,11 @@ public class partitionsAndN {
 
             @Override
             public void setup(Context context)  throws IOException, InterruptedException {
-                n = context.getCounter("N", "N");
+                n = context.getCounter(N);
+            }
+
+            @Override
+            public void cleanup(Context context)  throws IOException, InterruptedException {
             }
 
             @Override

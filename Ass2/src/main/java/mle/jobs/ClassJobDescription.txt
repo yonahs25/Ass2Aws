@@ -1,0 +1,24 @@
+partitionsAndN -
+    goes over all trigrams, splits them and counts N
+    gets - input file
+    will run onse
+
+calcNr4Partition -
+    calculates Nr for a given partition
+    gets - partitionsAndN output
+    will run twice(for each partition)
+
+calcTr4Partition -
+    calculates Tr for a given partition
+    gets - partitionsAndN output
+    will run twice(for each partition)
+
+sumXr4Partition-
+   for each trigram, gives it it's appropriate Nr/Tr value in the partition
+   gets - partitionsAndN output
+             Xr output of partition
+    will run 4 times(for each partition and Nr Tr - 2*2)
+
+sumXrTotal - 
+    for each word sums its Xr from both partition
+    gets - sumXr4Partition 0 and 1

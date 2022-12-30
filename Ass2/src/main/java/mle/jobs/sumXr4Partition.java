@@ -27,7 +27,8 @@ public class sumXr4Partition {
         public void map(LongWritable lineId, Text value, Context context) throws IOException, InterruptedException {
             String[] split = value.toString().split("\t");
             if (partition != -1){
-                context.write(new Text(split[partition]) , value);
+                long summed = Long.parseLong(split[1]) + Long.parseLong(split[2]);
+                context.write(new Text(String.valueOf(summed)) , value);
             }
         }
 
@@ -56,31 +57,33 @@ public class sumXr4Partition {
     }
 
     public static class ReducerClass extends Reducer<Text,Text,Text, Text> {
-        private boolean found_wanted_Nr = false;
-        private long current_Nr;
+        private boolean found_wanted_Xr = false;
+        private long current_Xr;
         @Override
         public void setup(Context context)  throws IOException, InterruptedException {
         }
 
         public void reduce(Text key, Iterable<Text> values, Context context) throws IOException,  InterruptedException {
-            current_Nr = 0;
+            current_Xr = 0;
             Stack<String> waiting_trigrams = new Stack<String>(); // stack of trigrams
 
-            for (Text value : values ) {
+            for (Text value : values) {
                 String[] split = value.toString().split("\t");
+                System.out.println(Arrays.toString(split));
+                System.out.println("@@@@@@@@@@@@@@@@!!!!!!!");
                 if (split.length == 1) {
-                    current_Nr = Long.parseLong(split[0]);
-                    found_wanted_Nr = true;
+                    current_Xr = Long.parseLong(split[0]);
+                    found_wanted_Xr = true;
                 } else {
-                    if (found_wanted_Nr){
-                        context.write(new Text(split[0]), new Text(Long.toString(current_Nr)));
+                    if (found_wanted_Xr){
+                        context.write(new Text(split[0]), new Text(Long.toString(current_Xr)));
                     } else {
                         waiting_trigrams.push(split[0]);
                     }
                 }
             }
             while (!waiting_trigrams.isEmpty()){
-                context.write(new Text(waiting_trigrams.pop()), new Text(Long.toString(current_Nr)));
+                context.write(new Text(waiting_trigrams.pop()), new Text(Long.toString(current_Xr)));
             }
         }
 

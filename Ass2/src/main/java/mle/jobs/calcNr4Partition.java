@@ -4,7 +4,6 @@ import java.io.IOException;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 
@@ -38,7 +37,7 @@ public class calcNr4Partition {
 
         public void reduce(LongWritable key, Iterable<LongWritable> values, Context context) throws IOException, InterruptedException {
             long sum = 0;
-            for (LongWritable val : values) {
+            for (LongWritable val : values) { // values is the list of 1s for each key (R)
                 sum += val.get();
             }
             sum_count.set(sum);

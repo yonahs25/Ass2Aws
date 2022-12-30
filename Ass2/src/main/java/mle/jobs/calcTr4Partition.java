@@ -1,5 +1,7 @@
 package mle.jobs;
 import java.io.IOException;
+import java.util.Arrays;
+
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -23,6 +25,8 @@ public class calcTr4Partition {
         @Override
         public void map(LongWritable key, Text value, Context c) throws IOException, InterruptedException {
             String[] line = value.toString().split("\t");
+            System.out.println(Arrays.toString(line));
+            System.out.println("@@@@@@@@@@@@@@@");
             if (direction == 0) { // 0 -> 1
                 c.write(new LongWritable(Long.parseLong(line[1])), new LongWritable(Long.parseLong(line[2])));
             } else {        // 1 -> 0
