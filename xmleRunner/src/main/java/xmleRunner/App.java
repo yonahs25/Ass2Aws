@@ -24,19 +24,22 @@ public class App
     private static String bucketName, keyName, serviceRole, jobFlowRole;
     public static void main( String[] args ) throws IOException
     {
-        // BasicConfigurator.configure();
-        File file;
-        AWSCredentials credentials;
-        file = new File("/home/yonahs/myaws/credentials");
-        credentials = new PropertiesCredentials(file);
-       credentials = new BasicAWSCredentials("ASIAVQALEBEKISMUIT2G", "O/aNq6O582F7u/jSs0rggkrBi+JspwShuHUVqSJR");
+        AWSCredentialsProvider cp = new ProfileCredentialsProvider();
+        AWSCredentials credentials = cp.getCredentials();
         AmazonElasticMapReduce mapReduce = new AmazonElasticMapReduceClient(credentials);
+        // BasicConfigurator.configure();
+//         File file;
+//         AWSCredentials credentials;
+//         file = new File("/home/yonahs/myaws/credentials");
+//         credentials = new PropertiesCredentials(file);
+//        credentials = new BasicAWSCredentials("ASIAVQALEBEKISMUIT2G","O/aNq6O582F7u/jSs0rggkrBi+JspwShuHUVqSJR");
+//         AmazonElasticMapReduce mapReduce = new AmazonElasticMapReduceClient(credentials);
 
         bucketName = "ohad-and-yonah-done-bucket";
         HadoopJarStepConfig hadoopJarStep = new HadoopJarStepConfig()
                 .withJar("s3://oy-jars-bucket/Ass2-1.0-SNAPSHOT.jar")
                 .withMainClass("mle.mleManager")
-                .withArgs("s3n://datasets.elasticmapreduce/ngrams/books/20090715/heb-all/3gram/data", //change name(in future)
+                .withArgs("s3n://datasets.elasticmapreduce/ngrams/books/20090715/eng-fiction-all/3gram/data", //change name(in future)
                         "s3n://" + bucketName + "/output");
 
         StepConfig stepConfig = new StepConfig()
@@ -45,25 +48,26 @@ public class App
                 .withActionOnFailure("TERMINATE_JOB_FLOW");
 
         JobFlowInstancesConfig instances = new JobFlowInstancesConfig()
-                .withInstanceCount(2)
+                .withInstanceCount(9)
                 .withMasterInstanceType(InstanceType.M4Large.toString())
                 .withSlaveInstanceType(InstanceType.M4Large.toString())
                 .withHadoopVersion("2.6.0")
-                .withEc2KeyName("vockey")
+                .withEc2KeyName("something")
                 .withKeepJobFlowAliveWhenNoSteps(false)
                 .withPlacement(new PlacementType("us-east-1a"));
 
-        serviceRole = "EMR_DefaultRole_V2";
+        serviceRole = "EMR_DefaultRole";
         jobFlowRole = "EMR_EC2_DefaultRole";
 
         RunJobFlowRequest runFlowRequest = new RunJobFlowRequest()
                 .withName("Deleted Estimations on English 3Gram")
                 .withInstances(instances)
                 .withSteps(stepConfig)
-                .withLogUri("s3n://" + bucketName + "/logs/");
-        // .withReleaseLabel("emr-4.2.0");
+                .withServiceRole(serviceRole)
+                .withJobFlowRole(jobFlowRole)
+                .withLogUri("s3n://" + bucketName + "/logs/")
+                .withReleaseLabel("emr-4.2.0");
 
         RunJobFlowResult runJobFlowResult = mapReduce.runJobFlow(runFlowRequest);
-
     }
 }

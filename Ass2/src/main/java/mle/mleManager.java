@@ -104,7 +104,7 @@ public class mleManager {
                                                                                     throws IOException {
         job.setJarByClass(sumXr4Partition.class);
         job.setPartitionerClass(sumXr4Partition.PartitionerClass.class);
-        // job.setCombinerClass(sumXr4Partition.ReducerClass.class);
+        job.setCombinerClass(sumXr4Partition.ReducerClass.class);
         job.setReducerClass(sumXr4Partition.ReducerClass.class);
 
         MultipleInputs.addInputPath(job, 
@@ -208,7 +208,7 @@ public class mleManager {
 
         input_bucket = args[0];
         output_bucket = args[1];
-        output_bucket = output_bucket.concat("/" + LocalTime.now().toString().replace(":","-")+"/");
+        output_bucket = output_bucket.concat("/" + System.currentTimeMillis()+"/");
 
         Configuration partitionsAndN_config = new Configuration();
         final Job partitionsAndN_job = Job.getInstance(partitionsAndN_config, "Split");

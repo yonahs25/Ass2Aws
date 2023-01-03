@@ -40,11 +40,11 @@ public class trigramComparable implements WritableComparable<trigramComparable> 
         this.ngram = parts[0]; // check this
 
         ///Maybe this is needed:
-        // if (!(parts.length > 1)){
-        //     this.ngram = "";
-        //     this.probs = Double.parseDouble(parts[0]);
-        //     this.triagram = new String[0];
-        // }
+        if (!(parts.length > 1)){
+            this.ngram = "";
+            this.probs = Double.parseDouble(parts[0]);
+            this.triagram = new String[0];
+        }
     }
 
     @Override
