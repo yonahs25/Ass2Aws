@@ -43,7 +43,7 @@ public class Main {
 
         File file;
         AWSCredentials credentials;
-        file = new File("/home/yonahs/myaws/credentials");
+        file = new File("/home/os/Desktop/Ass2_Final_Folder/Ass2Aws/credentials");
         credentials = new PropertiesCredentials(file);
         AmazonElasticMapReduce mapReduce = new AmazonElasticMapReduceClient(credentials);
         BasicConfigurator.configure();

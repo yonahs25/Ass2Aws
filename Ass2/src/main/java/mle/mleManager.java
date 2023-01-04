@@ -31,7 +31,7 @@ import mle.trigramComparator;
 
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import java.time.LocalTime;  
+import org.joda.time.LocalTime;  
 import java.io.IOException;
 
 
@@ -104,7 +104,7 @@ public class mleManager {
                                                                                     throws IOException {
         job.setJarByClass(sumXr4Partition.class);
         job.setPartitionerClass(sumXr4Partition.PartitionerClass.class);
-        job.setCombinerClass(sumXr4Partition.ReducerClass.class);
+        // job.setCombinerClass(sumXr4Partition.ReducerClass.class);
         job.setReducerClass(sumXr4Partition.ReducerClass.class);
 
         MultipleInputs.addInputPath(job, 
