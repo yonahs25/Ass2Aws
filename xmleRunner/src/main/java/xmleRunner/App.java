@@ -27,19 +27,11 @@ public class App
         AWSCredentialsProvider cp = new ProfileCredentialsProvider();
         AWSCredentials credentials = cp.getCredentials();
         AmazonElasticMapReduce mapReduce = new AmazonElasticMapReduceClient(credentials);
-        // BasicConfigurator.configure();
-//         File file;
-//         AWSCredentials credentials;
-//         file = new File("/home/yonahs/myaws/credentials");
-//         credentials = new PropertiesCredentials(file);
-//        credentials = new BasicAWSCredentials("ASIAVQALEBEKISMUIT2G","O/aNq6O582F7u/jSs0rggkrBi+JspwShuHUVqSJR");
-//         AmazonElasticMapReduce mapReduce = new AmazonElasticMapReduceClient(credentials);
-
         bucketName = "ohad-and-yonah-done-bucket";
         HadoopJarStepConfig hadoopJarStep = new HadoopJarStepConfig()
                 .withJar("s3://oy-jars-bucket/Ass2-1.0-SNAPSHOT.jar")
                 .withMainClass("mle.mleManager")
-                .withArgs("s3n://datasets.elasticmapreduce/ngrams/books/20090715/eng-fiction-all/3gram/data", //change name(in future)
+                .withArgs("s3n://datasets.elasticmapreduce/ngrams/books/20090715/eng-fiction-all/3gram/data",
                         "s3n://" + bucketName + "/output");
 
         StepConfig stepConfig = new StepConfig()

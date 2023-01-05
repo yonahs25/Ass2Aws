@@ -1,23 +1,16 @@
 package mle.jobs;
-import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
-
 import java.io.IOException;
-
-
-//Todo: go over names of classes and methods
 
 public class sumXrTotal {
     public static class MapperClassNrFile extends Mapper<LongWritable, Text,Text, Text> {
-
         @Override
         public void setup(Context context)  throws IOException, InterruptedException {
         }
-
         @Override
         public void cleanup(Context context)  throws IOException, InterruptedException {
         }
@@ -35,7 +28,6 @@ public class sumXrTotal {
         @Override
         public void setup(Context context)  throws IOException, InterruptedException {
         }
-
         @Override
         public void cleanup(Context context)  throws IOException, InterruptedException {
         }
@@ -47,10 +39,8 @@ public class sumXrTotal {
                 sum += Long.parseLong(value.toString());
             }
             context.write(trigram, new Text("" + sum));
-
         }
     }
-
 
     public static class PartitionerClass extends Partitioner<Text, Text> {
         @Override
@@ -58,8 +48,4 @@ public class sumXrTotal {
             return (key.hashCode() & Integer.MAX_VALUE ) % numPartitions;
         }
     }
-
-
-
-    
 }

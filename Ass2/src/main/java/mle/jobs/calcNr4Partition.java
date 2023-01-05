@@ -7,7 +7,6 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 
-
 public class calcNr4Partition {
     
     public static class MapperClass extends Mapper<LongWritable, Text, LongWritable, LongWritable> {
@@ -18,17 +17,15 @@ public class calcNr4Partition {
         public void setup(Context context) throws IOException, InterruptedException {
             partition = context.getConfiguration().getBoolean("partition", true) ? 0 : 1;
         }
-        
+        @Override
+        public void cleanup(Context context) throws IOException, InterruptedException {
+        }
 
 		public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             String[] line = value.toString().split("\t");
             if (line.length == 3) {
                 context.write(new LongWritable(Long.parseLong(line[partition + 1])), one_count);
             }
-        }
-
-        @Override
-        public void cleanup(Context context) throws IOException, InterruptedException {
         }
     }
 

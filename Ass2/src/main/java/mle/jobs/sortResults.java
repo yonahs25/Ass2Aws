@@ -4,13 +4,9 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
-
 import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
-
 import mle.trigramComparable;
-import mle.trigramComparator;
-
 
 public class sortResults {
 
@@ -18,7 +14,9 @@ public class sortResults {
 
         @Override
         public void setup(Context context) throws java.io.IOException, InterruptedException {
-            // Nothing to do here
+        }
+        @Override
+        public void cleanup(Context context) throws java.io.IOException, InterruptedException {
         }
 
         @Override
@@ -26,17 +24,11 @@ public class sortResults {
             trigramComparable trigram = new trigramComparable(value);
             context.write(trigram, new IntWritable(1)); // write the trigram and a dummy value so that the reducer will get it
         }
-
-        @Override
-        public void cleanup(Context context) throws java.io.IOException, InterruptedException {
-            // Nothing to do here
-        }
     }
 
     public static class ReducerClass extends Reducer<trigramComparable, IntWritable, trigramComparable, Text> {
         @Override
         public void setup(Context context) throws java.io.IOException, InterruptedException {
-            // Nothing to do here
         }
 
         @Override

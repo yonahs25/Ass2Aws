@@ -1,7 +1,5 @@
 package mle.jobs;
 import java.io.IOException;
-import java.util.Arrays;
-
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -9,10 +7,11 @@ import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.Reducer;
 
 public class calcTr4Partition {
-
      public static class MapperClass extends Mapper<LongWritable, Text, LongWritable, LongWritable> {
         private int direction;
-
+        @Override
+        public void cleanup(Context c) throws IOException, InterruptedException {
+        }
         @Override
         public void setup(Context c) throws IOException, InterruptedException {
             if (c.getConfiguration().get("direction").equals("01")) {
@@ -25,17 +24,11 @@ public class calcTr4Partition {
         @Override
         public void map(LongWritable key, Text value, Context c) throws IOException, InterruptedException {
             String[] line = value.toString().split("\t");
-            System.out.println(Arrays.toString(line));
-            System.out.println("@@@@@@@@@@@@@@@");
             if (direction == 0) { // 0 -> 1
                 c.write(new LongWritable(Long.parseLong(line[1])), new LongWritable(Long.parseLong(line[2])));
             } else {        // 1 -> 0
                 c.write(new LongWritable(Long.parseLong(line[2])), new LongWritable(Long.parseLong(line[1])));
             }
-        }
-
-        @Override
-        public void cleanup(Context c) throws IOException, InterruptedException {
         }
     }
 
@@ -61,5 +54,4 @@ public class calcTr4Partition {
             return (key.hashCode() & Integer.MAX_VALUE ) % numPartitions; 
         }
     }
-    
 }
